@@ -700,6 +700,22 @@ AC_DEFUN([WITH_IFP],
     AM_CONDITIONAL([BUILD_IFP], [test x"$with_infopipe" = xyes])
   ])
 
+AC_DEFUN([WITH_SECRETS],
+  [ AC_ARG_WITH([secrets],
+                [AC_HELP_STRING([--with-secrets],
+                                [Whether to build with secrets support [yes]]
+                               )
+                ],
+                [with_secrets=$withval],
+                with_secrets=yes
+               )
+
+    if test x"$with_secrets" = xyes; then
+        AC_DEFINE(BUILD_SECRETS, 1, [whether to build with secrets support])
+    fi
+    AM_CONDITIONAL([BUILD_SECRETS], [test x"$with_secrets" = xyes])
+  ])
+
 AC_DEFUN([WITH_LIBWBCLIENT],
   [ AC_ARG_WITH([libwbclient],
                 [AC_HELP_STRING([--with-libwbclient],

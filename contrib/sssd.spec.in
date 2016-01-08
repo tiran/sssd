@@ -163,6 +163,9 @@ BuildRequires: nfs-utils-lib-devel
 BuildRequires: samba4-devel
 BuildRequires: libsmbclient-devel
 
+BuildRequires: jansson-devel
+BuildRequires: http-parser-devel
+
 %description
 Provides a set of daemons to manage access to remote directories and
 authentication mechanisms. It provides an NSS and PAM interface toward

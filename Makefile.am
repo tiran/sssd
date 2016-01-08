@@ -203,6 +203,10 @@ if BUILD_DBUS_TESTS
 	sbus_codegen_tests
 endif # BUILD_DBUS_TESTS
 
+if BUILD_SECRETS
+    non_interactive_check_based_tests += secrets_tests
+endif
+
 endif # HAVE_CHECK
 
 if HAVE_CMOCKA
@@ -306,6 +310,11 @@ if BUILD_SAMBA
 sssdlib_LTLIBRARIES += \
     libsss_ipa.la \
     libsss_ad.la
+endif
+
+if BUILD_SECRETS
+sssdlib_LTLIBRARIES += \
+    libsss_secrets.la
 endif
 
 ldblib_LTLIBRARIES = \
@@ -441,6 +450,7 @@ AM_CPPFLAGS = \
     -DSSS_SUDO_SOCKET_NAME=\"$(pipepath)/sudo\" \
     -DSSS_AUTOFS_SOCKET_NAME=\"$(pipepath)/autofs\" \
     -DSSS_SSH_SOCKET_NAME=\"$(pipepath)/ssh\" \
+    -DSSS_SECRETS_SOCKET_NAME=\"$(pipepath)/secrets\" \
     -DLOCALEDIR=\"$(localedir)\" \
     -DBASE_FILE_STEM=\"$(*F)\" \
     $(NULL)
@@ -1842,6 +1852,20 @@ sbus_codegen_tests_LDADD = \
 
 endif # BUILD_DBUS_TESTS
 
+if BUILD_SECRETS
+secrets_tests_SOURCES = \
+    src/tests/secrets-tests.c
+secrets_tests_CFLAGS = \
+    $(CHECK_CFLAGS) \
+    $(HTTP_PARSER_CFLAGS) \
+    $(JANSSON_CFLAGS)
+secrets_tests_LDADD = \
+    $(CHECK_LIBS) \
+    $(HTTP_PARSER_LIBS) \
+    $(JANSSON_LIBS) \
+    libsss_secrets.la
+endif
+
 if BUILD_IFP
 if BUILD_CONFIG_LIB
 sss_config_tests_SOURCES = \
@@ -3021,6 +3045,22 @@ if BUILD_SSH
 libsss_ipa_la_SOURCES += src/providers/ipa/ipa_hostid.c
 endif
 
+if BUILD_SECRETS
+libsss_secrets_la_SOURCES = \
+    src/providers/secrets/secrets.c \
+    src/providers/secrets/secrets.h \
+    src/util/atomic_io.c
+libsss_secrets_la_CFLAGS = \
+    $(AM_CFLAGS) \
+    $(HTTP_PARSER_CFLAGS) \
+    $(JANSSON_CFLAGS)
+libsss_secrets_la_LIBADD = \
+    $(HTTP_PARSER_LIBS) \
+    $(JANSSON_LIBS)
+libsss_secrets_la_LDFLAGS = \
+    -avoid-version \
+    -module
+endif
 
 libsss_ad_la_SOURCES = \
     src/providers/ad/ad_opts.c \
