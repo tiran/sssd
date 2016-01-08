@@ -179,6 +179,8 @@ m4_include([src/external/libnfsidmap.m4])
 m4_include([src/external/cwrap.m4])
 m4_include([src/external/libresolv.m4])
 m4_include([src/external/intgcheck.m4])
+m4_include([src/external/libhttp_parser.m4])
+m4_include([src/external/libjansson.m4])
 
 if test x$build_config_lib = xyes; then
     m4_include([src/external/libaugeas.m4])
